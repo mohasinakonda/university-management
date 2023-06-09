@@ -2,7 +2,7 @@ import express, { urlencoded, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import userRoute from "./modules/users/users.routes";
-import logger from "./shared/logger/logger";
+// import logger from "./shared/logger/logger";
 const app = express();
 dotenv.config();
 //middleware
@@ -13,8 +13,21 @@ app.use(urlencoded({ extended: true }));
 //routes
 app.use("/api/v1", userRoute);
 
-app.get("/", async (req: Request, res: Response) => {
-    logger.info("server running successfully!");
+class ApiError extends Error {
+    statusCode: number;
+    constructor(statusCode: number, message: string | undefined, stack = "") {
+        super(message);
+        this.statusCode = statusCode;
+        if (stack) {
+            this.stack = stack;
+        } else {
+            Error.captureStackTrace(this, this.constructor);
+        }
+    }
+}
+
+app.get("/", (req: Request, res: Response) => {
+    throw new ApiError(400, "error occurs");
     res.send("working successfully!");
 });
 
