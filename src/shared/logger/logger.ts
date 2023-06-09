@@ -1,4 +1,5 @@
 import winston from "winston";
+import winstonDailyRotateFile from "winston-daily-rotate-file";
 const levels = {
     error: 0,
     warn: 1,
@@ -34,14 +35,26 @@ const format = winston.format.combine(
 const transports = [
     new winston.transports.Console(),
 
-    new winston.transports.File({
-        filename: "logs/error.log",
+    new winstonDailyRotateFile({
+        filename: "logs/error-%DATE%.log",
         level: "error",
+        datePattern: "YYYY-MM-DD",
+        maxSize: "20m",
+        maxFiles: "14d",
+    }),
+    new winstonDailyRotateFile({
+        filename: "logs/all-%DATE%.log",
+
+        datePattern: "YYYY-MM-DD",
+        maxSize: "20m",
+        maxFiles: "14d",
     }),
 
     new winston.transports.File({ filename: "logs/all.log" }),
 ];
 
+// Create the logger instance that has to be exported
+// and used to log messages.
 const logger = winston.createLogger({
     level: level(),
     levels,
