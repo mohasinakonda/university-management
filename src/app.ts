@@ -2,6 +2,7 @@ import express, { urlencoded, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import userRoute from "./modules/users/users.routes";
+import { semesterRoute } from "./modules/semister/semesrer.routes";
 // import logger from "./shared/logger/logger";
 const app = express();
 dotenv.config();
@@ -12,6 +13,7 @@ app.use(urlencoded({ extended: true }));
 
 //routes
 app.use("/api/v1", userRoute);
+app.use("/api/v1", semesterRoute);
 
 class ApiError extends Error {
     statusCode: number;

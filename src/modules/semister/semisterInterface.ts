@@ -12,11 +12,13 @@ type IMonth =
     | "October"
     | "November"
     | "December";
+type ISemesterTitle = "autumn" | "sumer" | "fall";
+type ISemesterCode = "01" | "02" | "03";
 
 export type ISemister = {
-    title: "autumn" | "sumer" | "fall";
+    title: ISemesterTitle;
     year: number;
-    code: "01" | "02" | "03";
+    code: ISemesterCode;
     startMonth: IMonth;
     endMonth: IMonth;
 };

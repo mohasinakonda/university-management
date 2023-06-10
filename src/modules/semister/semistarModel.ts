@@ -1,5 +1,8 @@
 import { Schema, model } from "mongoose";
-import { ISemister, SemisterModel } from "./semisterInterface";
+import {
+    ISemister as ISemester,
+    SemisterModel as SemesterModel,
+} from "./semisterInterface";
 const month = [
     "January",
     "February",
@@ -14,7 +17,7 @@ const month = [
     "November",
     "December",
 ];
-const SemesterSchema = new Schema<ISemister>(
+const SemesterSchema = new Schema<ISemester>(
     {
         title: {
             type: String,
@@ -46,7 +49,7 @@ const SemesterSchema = new Schema<ISemister>(
     }
 );
 
-export const Semester = model<ISemister, SemisterModel>(
+export const Semester = model<ISemester, SemesterModel>(
     "Semester",
     SemesterSchema
 );
