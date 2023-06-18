@@ -4,7 +4,7 @@ type IGetData<T> = {
     status: boolean;
     statusCode: number;
     message?: string | null;
-    meta: {
+    meta?: {
         page: number;
         limit: number;
         total: number;

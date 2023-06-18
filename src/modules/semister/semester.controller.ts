@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { create_semester, getAllSemestersService } from "./semester.service";
+import {
+    create_semester,
+    getAllSemestersService,
+    getSemesterService,
+} from "./semester.service";
 import { asyncCatch } from "../../shared/asyncCatch";
 import { sendResponse } from "../../shared/sendResponse";
 import { pick } from "../../shared/pick";
@@ -19,6 +23,19 @@ export const createSemester = asyncCatch(
         sendResponse(res, response);
     }
 );
+export const getSemester = asyncCatch(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await getSemesterService(id);
+    const response = {
+        status: true,
+        statusCode: 200,
+        message: "Semester fetch successfully!!",
+
+        data: result,
+    };
+
+    getResponse(res, response);
+});
 export const getAllSemesters = asyncCatch(
     async (req: Request, res: Response) => {
         const pagination = pick(req.query, [
@@ -27,8 +44,8 @@ export const getAllSemesters = asyncCatch(
             "sortBy",
             "sortOrder",
         ]);
-
-        const result = await getAllSemestersService(pagination);
+        const filter = pick(req.query, ["searchParams", "title", "code"]);
+        const result = await getAllSemestersService(filter, pagination);
         const response = {
             status: true,
             statusCode: 200,

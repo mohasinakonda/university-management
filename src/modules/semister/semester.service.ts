@@ -29,17 +29,59 @@ export const create_semester = async (
     }
     return createdSemester;
 };
-
+type IFilter = {
+    searchParams: string;
+    title: string;
+    code: string;
+    year: string;
+};
 export const getAllSemestersService = async (
+    filter: IFilter,
     pagination: IPaginationOption
 ): Promise<ISemesterGeneric<ISemester[]>> => {
     const { limit, page, skip, sortBy, sortOrder } =
         paginationHelper(pagination);
+    const { searchParams, ...filterData } = filter;
+
+    const andCondition = [];
+    if (searchParams) {
+        andCondition.push({
+            $or: [
+                {
+                    title: {
+                        $regex: searchParams,
+                        $options: "i",
+                    },
+                },
+                {
+                    code: {
+                        $regex: searchParams,
+                    },
+                },
+                {
+                    year: !isNaN(Number(searchParams)) && filter.searchParams,
+                },
+            ],
+        });
+    }
+    if (Object.keys(filterData).length > 0) {
+        andCondition.push({
+            $and: Object.entries(filterData).map(([key, value]) => {
+                return {
+                    [key]: value,
+                };
+            }),
+        });
+    }
+
     const sortOption: { [key: string]: SortOrder } = {};
     if (sortBy && sortOrder) {
         sortOption[sortBy] = sortOrder;
     }
-    const result = await Semester.find()
+    const whereCondition =
+        andCondition.length > 0 ? { $and: andCondition } : {};
+
+    const result = await Semester.find(whereCondition)
         .sort(sortOption)
         .skip(skip)
         .limit(limit);
@@ -53,4 +95,10 @@ export const getAllSemestersService = async (
 
         data: result,
     };
+};
+export const getSemesterService = async (id: string) => {
+    const result = await Semester.findById(id);
+    if (result) {
+        return result;
+    }
 };
