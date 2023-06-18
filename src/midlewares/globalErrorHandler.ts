@@ -1,4 +1,4 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import config from "../config";
 
 type IMessage = {
@@ -7,20 +7,20 @@ type IMessage = {
 };
 
 const globalErrorHandler = (
-    error,
+    error: TypeError,
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    let statusCode = 500;
-    let message = "Something went wrong";
-    let errorMessages: IMessage[] = [];
+    const statusCode = 500;
+    const message = "Something went wrong";
+    const errorMessages: IMessage[] = [];
     res.status(statusCode).json({
         success: false,
         errorMessages,
         message,
         stack: config.env !== "production" ? error.stack : undefined,
     });
-    next()
+    next();
 };
-export default globalErrorHandler
+export default globalErrorHandler;
