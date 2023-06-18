@@ -1,8 +1,8 @@
-import express, { urlencoded, Request, Response } from "express";
+import express, { urlencoded, Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import userRoute from "./modules/users/users.routes";
-import { semesterRoute } from "./modules/semister/semesrer.routes";
+
+import { moduleRoute } from "./routes";
 // import logger from "./shared/logger/logger";
 const app = express();
 dotenv.config();
@@ -12,10 +12,17 @@ app.use(express.json());
 app.use(urlencoded({ extended: true }));
 
 //routes
-app.use("/api/v1", userRoute);
-app.use("/api/v1", semesterRoute);
 
-class ApiError extends Error {
+app.use("/api/v1", moduleRoute);
+app.use((req: Request, res: Response, next: NextFunction) => {
+    res.status(404).json({
+        status: false,
+        path: req.originalUrl,
+        message: "Not found !!",
+    });
+    next();
+});
+export class ApiError extends Error {
     statusCode: number;
     constructor(statusCode: number, message: string | undefined, stack = "") {
         super(message);
@@ -29,7 +36,7 @@ class ApiError extends Error {
 }
 
 app.get("/", (req: Request, res: Response) => {
-    throw new ApiError(400, "error occurs");
+    // throw new ApiError(400, "error occurs");
     res.send("working successfully!");
 });
 
