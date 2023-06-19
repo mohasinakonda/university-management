@@ -102,3 +102,19 @@ export const getSemesterService = async (id: string) => {
         return result;
     }
 };
+type IUpdateData = {
+    title?: string;
+    code?: string;
+    year?: number;
+};
+
+export const updateSemesterService = async (id: string, data: IUpdateData) => {
+    if (data.title && data.year && TitleCodeMapper[data.title] !== data.code) {
+        throw new ApiError(400, "Invalid Semester code!");
+    }
+    return await Semester.findOneAndUpdate({ _id: id }, data, { new: true });
+};
+
+export const deleteSemesterService = async (id: string) => {
+    return await Semester.findOneAndDelete({ _id: id }, { new: true });
+};

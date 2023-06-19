@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import {
     create_semester,
+    deleteSemesterService,
     getAllSemestersService,
     getSemesterService,
+    updateSemesterService,
 } from "./semester.service";
 import { asyncCatch } from "../../shared/asyncCatch";
 import { sendResponse } from "../../shared/sendResponse";
@@ -53,6 +55,39 @@ export const getAllSemesters = asyncCatch(
             meta: result.meta,
             data: result.data,
         };
+        getResponse(res, response);
+    }
+);
+
+export const updateSemester = asyncCatch(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const data = req.body;
+        const result = await updateSemesterService(id, data);
+        const response = {
+            status: true,
+            statusCode: 200,
+            message: "Semester update successfully!!",
+
+            data: result,
+        };
+
+        getResponse(res, response);
+    }
+);
+
+export const deleteSemester = asyncCatch(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+
+        const result = await deleteSemesterService(id);
+        const response = {
+            status: true,
+            statusCode: 200,
+            message: "Semester delete successfully!!",
+            data: result,
+        };
+
         getResponse(res, response);
     }
 );
