@@ -77,3 +77,29 @@ export const getAllFacultyService = async (
         data: result,
     };
 };
+export const getFacultyByIdService = async (
+    id: string
+): Promise<IFaculty | null> => {
+    const result = await Faculty.findById(id);
+    if (!result) {
+        throw new Error("Faculty not found");
+    }
+    return result;
+};
+
+export const updateFacultyService = async (id: string, data: IFaculty) => {
+    const result = await Faculty.findOneAndUpdate({ _id: id }, data, {
+        new: true,
+    });
+    if (!result) {
+        throw new Error("Faculty not update!");
+    }
+    return result;
+};
+
+export const deleteFacultyService = async (id: string) => {
+    const result = await Faculty.findOneAndDelete({ _id: id }, { new: true });
+    if (!result) {
+        throw new Error("Faculty not delete!");
+    }
+};
