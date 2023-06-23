@@ -66,3 +66,25 @@ export const getAllDepartmentsService = async (
         data: result,
     };
 };
+
+export const getDepartmentService = async (id: string) => {
+    const result = await Department.findOne({ _id: id });
+    if (!result) {
+        throw new Error("Department data not found!!");
+    }
+    return result.populate("academicFaculty");
+};
+export const updateDepartmentService = async (id: string) => {
+    const result = await Department.findOneAndUpdate({ _id: id });
+    if (!result) {
+        throw new Error("Department data not found!!");
+    }
+    return result.populate("academicFaculty");
+};
+export const deleteDepartmentService = async (id: string) => {
+    const result = await Department.findOneAndDelete({ _id: id });
+    if (!result) {
+        throw new Error("Department data not found!!");
+    }
+    return result;
+};
