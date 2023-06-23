@@ -2,11 +2,12 @@ import express from "express";
 import { userRoute } from "../modules/users/users.routes";
 import { semesterRoute } from "../modules/semister/semesrer.routes";
 import { facultyRoutes } from "../modules/faculty/faculty.routes";
+import { departmentRouter } from "../modules/department/department.routes";
 const router = express.Router();
 
 const moduleRoutes = [
     {
-        path: "/create-semester",
+        path: "/semester",
         route: semesterRoute,
     },
     {
@@ -14,12 +15,16 @@ const moduleRoutes = [
         route: semesterRoute,
     },
     {
-        path: "/create-user",
+        path: "/user",
         route: userRoute,
     },
     {
         path: "/faculty",
         route: facultyRoutes,
+    },
+    {
+        path: "/department",
+        route: departmentRouter,
     },
 ];
 

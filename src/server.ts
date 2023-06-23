@@ -6,6 +6,7 @@ import logger from "./shared/logger/logger";
 async function main() {
     try {
         await mongoose.connect(config.db_url as string);
+        // await client.connect();
         app.listen(config.port, () => {
             logger.info(`server is running on port ${config.port}`);
         });
