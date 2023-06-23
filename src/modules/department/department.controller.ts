@@ -58,8 +58,9 @@ export const getDepartment = asyncCatch(async (req: Request, res: Response) => {
 });
 export const UpdateDepartment = asyncCatch(
     async (req: Request, res: Response) => {
+        const data = req.body;
         const { id } = req.params;
-        const result = await updateDepartmentService(id);
+        const result = await updateDepartmentService(id, data);
         const response = {
             status: true,
             statusCode: 200,

@@ -74,8 +74,13 @@ export const getDepartmentService = async (id: string) => {
     }
     return result.populate("academicFaculty");
 };
-export const updateDepartmentService = async (id: string) => {
-    const result = await Department.findOneAndUpdate({ _id: id });
+export const updateDepartmentService = async (
+    id: string,
+    data: IDepartment
+) => {
+    const result = await Department.findOneAndUpdate({ _id: id }, data, {
+        new: true,
+    });
     if (!result) {
         throw new Error("Department data not found!!");
     }
