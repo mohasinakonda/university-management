@@ -3,7 +3,10 @@ import { asyncCatch } from "../../shared/asyncCatch";
 import { sendResponse } from "../../shared/sendResponse";
 import {
     createDepartmentService,
+    deleteDepartmentService,
     getAllDepartmentsService,
+    getDepartmentService,
+    updateDepartmentService,
 } from "./department.service";
 import { pick } from "../../shared/pick";
 
@@ -35,6 +38,46 @@ export const getAllDepartments = asyncCatch(
             status: true,
             statusCode: 200,
             message: "Department fetch successfully!!",
+            data: result,
+        };
+
+        sendResponse(res, response);
+    }
+);
+export const getDepartment = asyncCatch(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await getDepartmentService(id);
+    const response = {
+        status: true,
+        statusCode: 200,
+        message: "Department fetch successfully!!",
+        data: result,
+    };
+
+    sendResponse(res, response);
+});
+export const UpdateDepartment = asyncCatch(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const result = await updateDepartmentService(id);
+        const response = {
+            status: true,
+            statusCode: 200,
+            message: "Department update successfully!!",
+            data: result,
+        };
+
+        sendResponse(res, response);
+    }
+);
+export const deleteDepartment = asyncCatch(
+    async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const result = await deleteDepartmentService(id);
+        const response = {
+            status: true,
+            statusCode: 200,
+            message: "Department delete successfully!!",
             data: result,
         };
 
