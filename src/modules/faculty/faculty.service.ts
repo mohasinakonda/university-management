@@ -39,7 +39,7 @@ export const getAllFacultyService = async (
             $or: [
                 {
                     title: {
-                        $regex: true,
+                        $regex: searchParams,
                         $options: "i",
                     },
                 },

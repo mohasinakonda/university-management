@@ -16,13 +16,9 @@ export const getAllDepartmentsService = async (
     filter: IDepartmentFilter,
     pagination: IPaginationOption
 ) => {
-    const { limit, page, sortBy, sortOrder, skip } =
+    const { limit, page, skip, sortBy, sortOrder } =
         paginationHelper(pagination);
-    const sortOption: { [key: string]: SortOrder } = {};
-    if (sortBy && sortOrder) {
-        sortOption[sortBy] = sortOrder;
-    }
-    const { title, searchParams } = filter;
+    const { searchParams, ...filterData } = filter;
 
     const andCondition = [];
     if (searchParams) {
@@ -30,17 +26,16 @@ export const getAllDepartmentsService = async (
             $or: [
                 {
                     title: {
-                        $regex: true,
+                        $regex: searchParams,
                         $options: "i",
                     },
                 },
             ],
         });
     }
-
-    if (title) {
+    if (Object.keys(filterData).length > 0) {
         andCondition.push({
-            $and: Object.entries(title).map(([key, value]) => {
+            $and: Object.entries(filterData).map(([key, value]) => {
                 return {
                     [key]: value,
                 };
@@ -48,16 +43,18 @@ export const getAllDepartmentsService = async (
         });
     }
 
+    const sortOption: { [key: string]: SortOrder } = {};
+    if (sortBy && sortOrder) {
+        sortOption[sortBy] = sortOrder;
+    }
     const whereCondition =
         andCondition.length > 0 ? { $and: andCondition } : {};
+
     const result = await Department.find(whereCondition)
         .populate("academicFaculty")
         .sort(sortOption)
         .skip(skip)
         .limit(limit);
-    if (!result) {
-        throw new Error("Failed to fetch Department");
-    }
     const total = await Department.countDocuments();
     return {
         meta: {
@@ -65,6 +62,7 @@ export const getAllDepartmentsService = async (
             limit,
             total,
         },
+
         data: result,
     };
 };
