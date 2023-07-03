@@ -6,34 +6,34 @@ const userSchema = new Schema<IUser, UserModel>(
         id: {
             type: String,
             unique: true,
-            required: true,
         },
-        name: {
-            type: String,
 
-            required: true,
-        },
-        email: {
-            type: String,
-            unique: true,
-            required: true,
-        },
         role: {
-            type: String,
-            required: true,
-        },
-        gender: {
             type: String,
             required: true,
         },
         password: {
             type: String,
-            required: true,
         },
+        student: {
+            type: Schema.Types.ObjectId,
+            ref: "student",
+        },
+        // admin:{
+        //     type:Schema.Types.ObjectId|IAdmin,
+        //     ref:'admins'
+        // },
+        // faculty:{
+        //     type:Schema.Types.ObjectId|IFacultyUser,
+        //     ref:'faculties'
+        // }
     },
     {
         timestamps: true,
+        toJSON: {
+            virtuals: true,
+        },
     }
 );
 
-export const User = model<IUser, UserModel>("userSchema", userSchema);
+export const User = model<IUser, UserModel>("users", userSchema);
