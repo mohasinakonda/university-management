@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
-import { createUserService } from "./user.service";
+// import { createUserService } from "./user.service";
 import { asyncCatch } from "../../shared/asyncCatch";
 import { sendResponse } from "../../shared/sendResponse";
+import { createStudentService } from "./user.service";
 
-const createUser = asyncCatch(async (req: Request, res: Response) => {
-    const { ...user } = req.body;
-    const result = await createUserService(user);
+export const createStudent = asyncCatch(async (req: Request, res: Response) => {
+    const { student, ...user } = req.body;
+
+    const result = await createStudentService(student, user);
     const response = {
         status: true,
         statusCode: 200,
@@ -14,5 +16,3 @@ const createUser = asyncCatch(async (req: Request, res: Response) => {
     };
     sendResponse(res, response);
 });
-
-export default createUser;

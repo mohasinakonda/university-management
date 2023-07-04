@@ -37,12 +37,12 @@ export const StudentSchema = new Schema<IStudent, StudentModel>(
         },
         email: {
             type: String,
-            unique: true,
+            // unique: true,
             required: true,
         },
         contactNo: {
             type: String,
-            unique: true,
+            // unique: true,
             required: true,
         },
         emergencyContactNo: {
@@ -117,17 +117,17 @@ export const StudentSchema = new Schema<IStudent, StudentModel>(
         },
         academicFaculty: {
             type: Schema.Types.ObjectId,
-            ref: "AcademicFaculty",
+            ref: "faculty",
             required: true,
         },
         academicDepartment: {
             type: Schema.Types.ObjectId,
-            ref: "AcademicDepartment",
+            ref: "departments",
             required: true,
         },
         academicSemester: {
             type: Schema.Types.ObjectId, // academicSemester --> _id
-            ref: "AcademicSemester",
+            ref: "Semester",
             required: true,
         },
         profileImage: {
